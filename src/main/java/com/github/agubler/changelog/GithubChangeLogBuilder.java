@@ -24,6 +24,11 @@ import static org.springframework.util.StringUtils.hasText;
 public class GithubChangeLogBuilder extends Builder {
 
     /**
+     * Default github host
+     */
+    private static final String DEFAULT_GITHUB_HOST = "github.com";
+
+    /**
      * The owner of the repository for the change log
      */
     private final String githubOwner;
@@ -90,10 +95,16 @@ public class GithubChangeLogBuilder extends Builder {
     @Override
     public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) throws IOException {
         if (this.validate()) {
+            String gitHubHost = getDescriptor().getGihubHost();
+
+            if (!hasText(gitHubHost)) {
+                gitHubHost = DEFAULT_GITHUB_HOST;
+            }
+
             listener.getLogger().println("[INFO] Starting change log generation");
             ChangeLogService changeLogService = new ChangeLogService(listener);
-            changeLogService.createChangeLog(getDescriptor().getGihubHost(), getDescriptor().getGithubOAuthToken(),
-                    this.githubOwner, this.githubRepository, this.githubChangeLogBranch, this.changeLogFilename, this.parseJiraReferences);
+            changeLogService.createChangeLog(gitHubHost, getDescriptor().getGithubOAuthToken(), this.githubOwner, this.githubRepository,
+                    this.githubChangeLogBranch, this.changeLogFilename, this.parseJiraReferences);
             listener.getLogger().println("[INFO] Change log generation complete");
             return true;
         } else {
@@ -107,8 +118,8 @@ public class GithubChangeLogBuilder extends Builder {
      * @return boolean that indicates whether the configuration is correct
      */
     private boolean validate() {
-        return hasText(getDescriptor().getGihubHost()) && hasText(getDescriptor().getGithubOAuthToken()) && hasText(this.getGithubOwner()) &&
-                hasText(this.getGithubRepository()) && hasText(this.getGithubChangeLogBranch()) && hasText(this.getChangeLogFilename());
+        return hasText(getDescriptor().getGithubOAuthToken()) && hasText(this.getGithubOwner()) && hasText(this.getGithubRepository()) &&
+               hasText(this.getGithubChangeLogBranch()) && hasText(this.getChangeLogFilename());
     }
 
     @Override
