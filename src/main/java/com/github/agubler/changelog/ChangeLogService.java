@@ -123,7 +123,7 @@ public class ChangeLogService {
         }
 
         //base64 encode and set the content on the request object
-        gitHubFileContentRequest.setContent(new String(Base64.encodeBase64(changeLogText.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8));
+        gitHubFileContentRequest.setContent(new String(Base64.encodeBase64(changeLogText.getBytes("UTF-8")), "UTF-8"));
         //put the file onto github
         fileContentsService.createOrUpdateFile(repository, changeLogName, gitHubFileContentRequest);
         listener.getLogger().println("[INFO] Change log generation complete - https://" + gitHubHost + "/" + owner + "/" + repositoryName + "/blob/" + changeLogBranch + "/" + changeLogName);
