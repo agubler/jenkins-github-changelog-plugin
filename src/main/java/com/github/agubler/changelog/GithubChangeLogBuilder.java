@@ -219,6 +219,7 @@ public class GithubChangeLogBuilder extends Builder {
         public String getGihubHost() {
             return githubHost;
         }
+
         public String getGithubOAuthToken() {
             return githubOAuthToken;
         }
