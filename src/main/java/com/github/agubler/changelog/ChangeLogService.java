@@ -67,7 +67,7 @@ public class ChangeLogService {
      * @throws IOException
      */
     public void createChangeLog(String gitHubHost, String gitHubAuthToken, String owner, String repositoryName,
-                                String changeLogBranch, String changeLogName, boolean parseJiraReferences) throws IOException {
+                                String changeLogBranch, String changeLogName, boolean parseJiraReferences, String jiraUrl) throws IOException {
 
         GitHubClient client;
 
@@ -109,13 +109,15 @@ public class ChangeLogService {
                 RepositoryTag head = repositoryTagListIterator.previous();
                 repositoryTagListIterator.remove();
                 TypedResource base = repositoryTagListIterator.next().getCommit();
-                changeLogText = changeLogText + generateChangeLogForCommits(client, repository, gitHubPullRequestUrl, head.getName(), head.getCommit(), base, parseJiraReferences);
+                changeLogText = changeLogText + generateChangeLogForCommits(client, repository, gitHubPullRequestUrl,
+                        head.getName(), head.getCommit(), base, parseJiraReferences, jiraUrl);
             } else {
                 RepositoryBranch headBranch = findBranch(repositoryService, repository, "integration");
                 TypedResource base = repositoryTagListIterator.next().getCommit();
                 if (headBranch != null) {
                     TypedResource head = headBranch.getCommit();
-                    changeLogText = changeLogText + generateChangeLogForCommits(client, repository, gitHubPullRequestUrl, "upcoming", head, base, parseJiraReferences);
+                    changeLogText = changeLogText + generateChangeLogForCommits(client, repository, gitHubPullRequestUrl,
+                            "upcoming", head, base, parseJiraReferences, jiraUrl);
                 }
             }
         }
@@ -158,8 +160,8 @@ public class ChangeLogService {
      * @return The markdown change log text
      * @throws IOException
      */
-    private String generateChangeLogForCommits(GitHubClient client, Repository repository, String gitHubPullRequestUrl,
-                                               String headTitle, TypedResource head, TypedResource base, boolean findJiraReferences) throws IOException {
+    private String generateChangeLogForCommits(GitHubClient client, Repository repository, String gitHubPullRequestUrl, String headTitle,
+                                               TypedResource head, TypedResource base, boolean findJiraReferences, String jiraUrl) throws IOException {
         CommitService commitService = new CommitService(client);
         RepositoryCommitCompare repositoryCommitCompare = commitService.compare(repository, base.getSha(), head.getSha());
 
@@ -181,7 +183,7 @@ public class ChangeLogService {
                 String prNumber = mergeMessage.split("#")[1].split(" ")[0];
                 //Append the change log item to the main text
                 changeLogText = changeLogText + "- [#" + prNumber + "](" + gitHubPullRequestUrl + prNumber + ") " +
-                        parseJiraReference(findJiraReferences, mergeMessageArray[1]) + "\n";
+                        parseJiraReference(findJiraReferences, jiraUrl, mergeMessageArray[1]) + "\n";
             }
         }
         return changeLogText;
@@ -190,15 +192,17 @@ public class ChangeLogService {
     /**
      * Parse any jira references added to the PR message
      *
+     * @param findJiraReferences indicates if jira references need to be parsed
+     * @param jiraUrl The jira url
      * @param message The PR message to parse
      * @return The parsed message
      */
-    private String parseJiraReference(boolean findJiraReferences, String message) {
+    private String parseJiraReference(boolean findJiraReferences, String jiraUrl, String message) {
         if (findJiraReferences) {
             Pattern jiraPattern = Pattern.compile("(\\w\\w\\w-\\d+)");
             Matcher jiraMatcher = jiraPattern.matcher(message);
             if (jiraMatcher.find()) {
-                return message.replaceAll("(\\w\\w\\w-\\d+)", "[" + jiraMatcher.group(0) + "](" + "http://jira.accelus.com/browse/" + jiraMatcher.group(0) + ")");
+                return message.replaceAll("(\\w\\w\\w-\\d+)", "[" + jiraMatcher.group(0) + "](" + jiraUrl + "/browse/" + jiraMatcher.group(0) + ")");
             }
         }
         return message;

@@ -54,6 +54,11 @@ public class GithubChangeLogBuilder extends Builder {
     private final boolean parseJiraReferences;
 
     /**
+     * The jira url to use if parsing url references
+     */
+    private final String jiraUrl;
+
+    /**
      * The constructor for the builder
      *
      * @param githubOwner The owner of the repo
@@ -64,12 +69,13 @@ public class GithubChangeLogBuilder extends Builder {
      */
     @DataBoundConstructor
     public GithubChangeLogBuilder(String githubOwner, String githubRepository, String githubChangeLogBranch,
-                                  String changeLogFilename, boolean parseJiraReferences) {
+                                  String changeLogFilename, boolean parseJiraReferences, String jiraUrl) {
         this.githubOwner = githubOwner;
         this.githubRepository = githubRepository;
         this.githubChangeLogBranch = githubChangeLogBranch;
         this.changeLogFilename = changeLogFilename;
         this.parseJiraReferences = parseJiraReferences;
+        this.jiraUrl = jiraUrl;
     }
 
     public String getGithubOwner() {
@@ -104,7 +110,7 @@ public class GithubChangeLogBuilder extends Builder {
             listener.getLogger().println("[INFO] Starting change log generation");
             ChangeLogService changeLogService = new ChangeLogService(listener);
             changeLogService.createChangeLog(gitHubHost, getDescriptor().getGithubOAuthToken(), this.githubOwner, this.githubRepository,
-                    this.githubChangeLogBranch, this.changeLogFilename, this.parseJiraReferences);
+                    this.githubChangeLogBranch, this.changeLogFilename, this.parseJiraReferences, this.jiraUrl);
             listener.getLogger().println("[INFO] Change log generation complete");
             return true;
         } else {

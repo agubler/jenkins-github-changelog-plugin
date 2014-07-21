@@ -15,4 +15,7 @@
 	<f:entry title="Parse Jira References" field="parseJiraReferences">
 		<f:checkbox />
 	</f:entry>
+	<f:entry title="Jira Url" field="jiraUrl">
+		<f:textbox name="jiraUrl"/>
+	</f:entry>
 </j:jelly>
