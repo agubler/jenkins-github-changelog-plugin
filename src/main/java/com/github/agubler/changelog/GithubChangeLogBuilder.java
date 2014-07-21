@@ -98,10 +98,14 @@ public class GithubChangeLogBuilder extends Builder {
         return parseJiraReferences;
     }
 
+    public String getJiraUrl() {
+        return jiraUrl;
+    }
+
     @Override
     public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) throws IOException {
         if (this.validate()) {
-            String gitHubHost = getDescriptor().getGihubHost();
+            String gitHubHost = getDescriptor().getGithubHost();
 
             if (!hasText(gitHubHost)) {
                 gitHubHost = DEFAULT_GITHUB_HOST;
@@ -141,7 +145,7 @@ public class GithubChangeLogBuilder extends Builder {
     public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
 
         /**
-         * The host for github, defaults to gihub.com.
+         * The host for github
          */
         private String githubHost;
 
@@ -222,7 +226,7 @@ public class GithubChangeLogBuilder extends Builder {
             return super.configure(req,formData);
         }
 
-        public String getGihubHost() {
+        public String getGithubHost() {
             return githubHost;
         }
 
