@@ -1,0 +1,18 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+	<f:entry title="Github Owner" field="githubOwner">
+		<f:textbox name="githubOwner"/>
+	</f:entry>
+	<f:entry title="Github Repository" field="githubRepository">
+		<f:textbox name="githubRepository"/>
+	</f:entry>
+	<f:entry title="Change Log Branch" field="githubChangeLogBranch">
+		<f:textbox name="githubChangeLogBranch"/>
+	</f:entry>
+	<f:entry title="Change Log Filename" field="changeLogFilename"
+	         description="The path and filename of the target change log file, this is relative to the root directory of the repository">
+		<f:textbox name="changeLogFilename"/>
+	</f:entry>
+	<f:entry title="Parse Jira References" field="parseJiraReferences">
+		<f:checkbox />
+	</f:entry>
+</j:jelly>

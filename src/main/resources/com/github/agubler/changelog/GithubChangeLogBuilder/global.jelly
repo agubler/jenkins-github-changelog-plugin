@@ -1,0 +1,11 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
+         xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+	<f:section title="GitHub Change Log">
+		<f:entry title="Github Host" field="githubHost" description="Hostname for Github">
+			<f:textbox default="github.com"/>
+		</f:entry>
+		<f:entry title="Github OAuth Token" field="githubOAuthToken" description="OAuth Token for Github">
+			<f:textbox />
+		</f:entry>
+	</f:section>
+</j:jelly>
