@@ -115,7 +115,6 @@ public class GithubChangeLogBuilder extends Builder {
             ChangeLogService changeLogService = new ChangeLogService(listener);
             changeLogService.createChangeLog(gitHubHost, getDescriptor().getGithubOAuthToken(), this.githubOwner, this.githubRepository,
                     this.githubChangeLogBranch, this.changeLogFilename, this.parseJiraReferences, this.jiraUrl);
-            listener.getLogger().println("[INFO] Change log generation complete");
             return true;
         } else {
             listener.getLogger().println("[ERROR] Unable to generate github change log; missing configuration");
