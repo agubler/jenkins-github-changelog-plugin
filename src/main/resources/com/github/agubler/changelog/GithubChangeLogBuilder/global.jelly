@@ -2,7 +2,7 @@
          xmlns:t="/lib/hudson" xmlns:f="/lib/form">
 	<f:section title="GitHub Change Log">
 		<f:entry title="Github Host" field="githubHost" description="Hostname for Github">
-			<f:textbox default="github.com"/>
+			<f:textbox />
 		</f:entry>
 		<f:entry title="Github OAuth Token" field="githubOAuthToken" description="OAuth Token for Github">
 			<f:textbox />
